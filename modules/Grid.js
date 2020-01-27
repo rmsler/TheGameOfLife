@@ -11,7 +11,7 @@ function Grid(rows, columns, wrapper) {
     this.nextGrid = new Array(rows);
 
     this.timer;
-    this.reproductionTime = 100;
+    this.reproductionTime = 500;
 }
 Object.assign(Grid.prototype, {
     initializeGrids: function(){
@@ -98,10 +98,21 @@ Object.assign(Grid.prototype, {
         // button to clear
         let clearButton = document.getElementById('clear');
         clearButton.onclick = ()=>this.clearButtonHandler();
+
         // button to next
         var nextButton = document.getElementById('next');
         nextButton.onclick = ()=>this.computeNextGen();
+
+        //range input 
+        var speedButton = document.getElementById('speed');
+        speedButton.onchange = ()=>this.updateSpeed();
     },
+    updateSpeed: function(e){
+        e = e || window.event;
+        e = e.target || e.srcElement;
+        this.reproductionTime = 500 - e.value;
+    },
+
     clearButtonHandler: function(){
         this.playing = false;
         let startButton = document.getElementById('start');
