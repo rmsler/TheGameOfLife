@@ -36,7 +36,6 @@ Object.assign(Grid.prototype, {
             }
         }
     },
-
     // Initialize
     initialize: function(wrapper){
         this.createTable(wrapper);
