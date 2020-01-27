@@ -1,4 +1,4 @@
-function Grid(rows, columns) {
+function Grid(rows, columns, wrapper) {
     if (!(this instanceof Grid)) {
         return new Grid(rows, columns);
     }
@@ -12,7 +12,6 @@ function Grid(rows, columns) {
 
     this.timer;
     this.reproductionTime = 100;
-    
 }
 Object.assign(Grid.prototype, {
     initializeGrids: function(){
@@ -58,24 +57,25 @@ Object.assign(Grid.prototype, {
                 let cell = document.createElement("td");
                 cell.setAttribute("id", i + "_" + j);
                 cell.setAttribute("class", "dead");
-                cell.onclick = this.cellClickHandler;
+                cell.onclick = () => this.cellClickHandler();
                 tr.appendChild(cell);
             }
             table.appendChild(tr);
         }
         $(wrapper).append(table);
     },
-    cellClickHandler: function(){
-        let rowcol = this.id.split("_");
+    cellClickHandler: function(e){
+        e = e || window.event;
+        e = e.target || e.srcElement;
+        let rowcol = e.id.split("_");
         let row = rowcol[0];
         let col = rowcol[1];
-
-        let classes = this.getAttribute("class");
+        let classes = e.getAttribute("class");
         if (classes.indexOf("live") > -1) {
-            this.setAttribute("class", "dead");
+            e.setAttribute("class", "dead");
             this.grid[row][col] = 0;
         } else {
-            this.setAttribute("class", "live");
+            e.setAttribute("class", "live");
             this.grid[row][col] = 1;
         }
     },
@@ -94,11 +94,14 @@ Object.assign(Grid.prototype, {
     setupControlButtons: function(){
         // button to start
         let startButton = document.getElementById('start');
-        startButton.onclick = this.startButtonHandler;
+        startButton.onclick = ()=> this.startButtonHandler();
 
         // button to clear
         let clearButton = document.getElementById('clear');
-        clearButton.onclick = this.clearButtonHandler;
+        clearButton.onclick = ()=>this.clearButtonHandler();
+        // button to next
+        var nextButton = document.getElementById('next');
+        nextButton.onclick = ()=>this.computeNextGen();
     },
     clearButtonHandler: function(){
         this.playing = false;
@@ -117,26 +120,28 @@ Object.assign(Grid.prototype, {
         for (let i = 0; i < cells.length; i++) {
             cells[i].setAttribute("class", "dead");
         }
-        this.resetGrids;
-    },
-    play: function(){
+        this.resetGrids();
+    }, 
+    playGame: function(){
         this.computeNextGen();
 
         if (this.playing) {
-            this.timer = setTimeout(this.play, this.reproductionTime);
+            this.timer = setTimeout(()=>this.playGame(), this.reproductionTime);
         }
     },
-    startButtonHandler: function(){
+    startButtonHandler: function(e){
+        e = e || window.event;
+        e = e.target || e.srcElement;
         if (this.playing) {
             console.log("Pause the game");
             this.playing = false;
-            this.innerHTML = "Continue";
+            e.innerHTML = "Continue";
             clearTimeout(this.timer);
         } else {
             console.log("Continue the game");
             this.playing = true;
-            this.innerHTML = "Pause";
-            this.play();
+            e.innerHTML = "Pause";
+            this.playGame();
         }
     },
     
@@ -153,7 +158,7 @@ Object.assign(Grid.prototype, {
         this.updateView();
     },
     applyRules: function(row, col){
-        let numNeighbors = countNeighbors(row, col);
+        let numNeighbors = this.countNeighbors(row, col);
         if (this.grid[row][col] == 1) {
             if (numNeighbors < 2) {
                 this.nextGrid[row][col] = 0;
