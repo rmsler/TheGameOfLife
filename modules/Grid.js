@@ -1,4 +1,5 @@
 import { Controls } from "./Controls.js";
+import { Cell } from "./Cell.js";
 
 function Grid(rows, columns) {
     if (!(this instanceof Grid)) {
@@ -6,11 +7,10 @@ function Grid(rows, columns) {
     }
     this.rows = rows;
     this.columns = columns;
-
-    this.playing = false;
-
     this.grid = new Array(rows);
     this.nextGrid = new Array(rows);
+
+    this.playing = false;
 }
 Object.assign(Grid.prototype, {
     initializeGrids: function(){
@@ -40,7 +40,6 @@ Object.assign(Grid.prototype, {
         this.createTable(wrapper);
         this.initializeGrids();
         this.resetGrids();
-        //this.setupControlButtons();
         let controlButtons = new Controls(this.computeNextGen.bind(this), this.resetGrids.bind(this));
         controlButtons.setupControlButtons();
     },
@@ -53,31 +52,14 @@ Object.assign(Grid.prototype, {
 
         for (let i = 0; i < this.rows; i++) {
             let tr = document.createElement("tr");
-            for (let j = 0; j < this.columns; j++) { //
-                let cell = document.createElement("td");
-                cell.setAttribute("id", i + "_" + j);
-                cell.setAttribute("class", "dead");
-                cell.onclick = () => this.cellClickHandler();
+            for (let j = 0; j < this.columns; j++) { 
+                let cellElem = new Cell(this.grid);
+                let cell = cellElem.createCell(i, j);
                 tr.appendChild(cell);
             }
             table.appendChild(tr);
         }
         $(wrapper).append(table);
-    },
-    cellClickHandler: function(e){
-        e = e || window.event;
-        e = e.target || e.srcElement;
-        let rowcol = e.id.split("_");
-        let row = rowcol[0];
-        let col = rowcol[1];
-        let classes = e.getAttribute("class");
-        if (classes.indexOf("live") > -1) {
-            e.setAttribute("class", "dead");
-            this.grid[row][col] = 0;
-        } else {
-            e.setAttribute("class", "live");
-            this.grid[row][col] = 1;
-        }
     },
     updateView: function(){
         for (let i = 0; i < this.rows; i++) {
@@ -97,7 +79,6 @@ Object.assign(Grid.prototype, {
                 this.applyRules(i, j);
             }
         }
-    
         // copy NextGrid to grid, and reset nextGrid
         this.copyAndResetGrid();
         // copy all 1 values to "live" in the table
