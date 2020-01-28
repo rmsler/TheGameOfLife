@@ -1,6 +1,8 @@
+import { Shapes } from "./Shapes.js";
+
 function Controls(computeNextGen, resetGrids) {
     if (!(this instanceof Controls)) {
-        return new Controls(rows, columns);
+        return new Controls(computeNextGen, resetGrids);
     }
     this.computeNextGen = () => computeNextGen();
     this.resetGrids = () => resetGrids();
@@ -9,6 +11,16 @@ function Controls(computeNextGen, resetGrids) {
 }
 Object.assign(Controls.prototype, {
     setupControlButtons: function(){
+        //selector for shapes
+        var shapeSelector = document.getElementById('shapes');
+            //clear the canvas for the new predefined shapes 
+        shapeSelector.onchange = () => this.clearButtonHandler();
+            //get config and draw it on the canvas
+        $.getJSON("config.json", function(data) {
+            let shape = new Shapes(data, this.clearButtonHandler);
+            shape.init(shapeSelector);
+        });
+        //button to start
         let startButton = document.getElementById('start');
         startButton.onclick = ()=> this.startButtonHandler();
 
