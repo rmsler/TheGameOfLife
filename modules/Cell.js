@@ -18,8 +18,16 @@ Object.assign(Cell.prototype, {
         this.updateVisual();
     },
     updateVisual: function(){
-        this.domElement.removeAttribute("class", !this.state!=0 ? "false" : "true");
-        this.domElement.setAttribute("class", this.state!=0 ?"true" : "false");
+        //console.log(this.domElement.classList + " " + this.state)
+        let cellClass = (this.domElement.classList[0]);
+        let state = !!(this.state);
+        // console.log(cellClass);
+        // console.log(state);
+        
+        if(cellClass.toString() !== state.toString()){
+            this.domElement.removeAttribute("class", this.state!=0 ? "false" : "true");
+            this.domElement.setAttribute("class", this.state!=0 ?"true" : "false");
+        }
     }
 })
 export {Cell};
