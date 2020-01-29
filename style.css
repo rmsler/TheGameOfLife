@@ -37,11 +37,11 @@ span {
       #C5DEC6, #587559);
 }
 
-td.dead {
+td.false {
   background-color: transparent;
 }
 
-td.live {
+td.true {
   background-color: #CC4774;
   border-radius: 10px;
 }

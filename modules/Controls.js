@@ -48,8 +48,8 @@ Object.assign(Controls.prototype, {
         startButton.innerHTML = "Start";
         clearTimeout(this.timer);
 
-        let cellsList = document.getElementsByClassName("live");
-        // convert to array first, otherwise, you're working on a live node list
+        let cellsList = document.getElementsByClassName("true");
+        // convert to array first, otherwise, you're working on a true node list
         // and the update doesn't work!
         let cells = [];
         for (let i = 0; i < cellsList.length; i++) {
@@ -57,7 +57,7 @@ Object.assign(Controls.prototype, {
         }
 
         for (let i = 0; i < cells.length; i++) {
-            cells[i].setAttribute("class", "dead");
+            cells[i].setAttribute("class", "false");
         }
         this.resetGrids();
     }, 

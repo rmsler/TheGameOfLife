@@ -1,31 +1,28 @@
-function Cell(grid) {
+function Cell(row, columns) {
     if (!(this instanceof Cell)) {
         return new Cell(grid);
     }
-    this.grid = grid;
+    this.row = row;
+    this.columns = columns;
+    this.state = false;
+    this.domElement;
 }
 Object.assign(Cell.prototype, {
-    createCell: function(i, j){
+    createCell: function(){
         let cell = document.createElement("td");
-        cell.setAttribute("id", i + "_" + j);
-        cell.setAttribute("class", "dead");
+        cell.setAttribute("id", this.row + "_" + this.columns);
+        cell.setAttribute("class", this.state);
         cell.onclick = () => this.cellClickHandler();
-        return cell;
+        this.domElement = cell;
+        return this.domElement;
     },
-    cellClickHandler: function(e){
-        e = e || window.event;
-        e = e.target || e.srcElement;
-        let rowcol = e.id.split("_");
-        let row = rowcol[0];
-        let col = rowcol[1];
-        let classes = e.getAttribute("class");
-        if (classes.indexOf("live") > -1) {
-            e.setAttribute("class", "dead");
-            this.grid[row][col] = 0;
-        } else {
-            e.setAttribute("class", "live");
-            this.grid[row][col] = 1;
-        }
+    cellClickHandler: function(){ 
+        this.state = Number(!this.state);
+        this.updateVisual();
     },
+    updateVisual: function(){
+        this.domElement.removeAttribute("class", !this.state!=0 ? "false" : "true");
+        this.domElement.setAttribute("class", this.state!=0 ?"true" : "false");
+    }
 })
 export {Cell};

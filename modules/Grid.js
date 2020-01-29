@@ -22,7 +22,7 @@ Object.assign(Grid.prototype, {
     resetGrids: function(){
         for (let i = 0; i < this.rows; i++) {
             for (let j = 0; j < this.columns; j++) {
-                this.grid[i][j] = 0;
+                this.grid[i][j].state = 0;
                 this.nextGrid[i][j] = 0;
             }
         }
@@ -30,15 +30,15 @@ Object.assign(Grid.prototype, {
     copyAndResetGrid: function(){
         for (let i = 0; i < this.rows; i++) {
             for (let j = 0; j < this.columns; j++) {
-                this.grid[i][j] = this.nextGrid[i][j];
+                this.grid[i][j].state = !!(this.nextGrid[i][j]);
                 this.nextGrid[i][j] = 0;
             }
         }
     },
     // Initialize
     initialize: function(wrapper){
-        this.createTable(wrapper);
         this.initializeGrids();
+        this.createTable(wrapper);
         this.resetGrids();
         let controlButtons = new Controls(this.computeNextGen.bind(this), this.resetGrids.bind(this));
         controlButtons.setupControlButtons();
@@ -53,8 +53,8 @@ Object.assign(Grid.prototype, {
         for (let i = 0; i < this.rows; i++) {
             let tr = document.createElement("tr");
             for (let j = 0; j < this.columns; j++) { 
-                let cellElem = new Cell(this.grid);
-                let cell = cellElem.createCell(i, j);
+                this.grid[i][j] = new Cell(i, j);
+                let cell = this.grid[i][j].createCell();
                 tr.appendChild(cell);
             }
             table.appendChild(tr);
@@ -64,12 +64,7 @@ Object.assign(Grid.prototype, {
     updateView: function(){
         for (let i = 0; i < this.rows; i++) {
             for (let j = 0; j < this.columns; j++) {
-                let cell = document.getElementById(i + "_" + j);
-                if (this.grid[i][j] == 0) {
-                    cell.setAttribute("class", "dead");
-                } else {
-                    cell.setAttribute("class", "live");
-                }
+                this.grid[i][j].updateVisual();
             }
         }
     },
@@ -81,12 +76,12 @@ Object.assign(Grid.prototype, {
         }
         // copy NextGrid to grid, and reset nextGrid
         this.copyAndResetGrid();
-        // copy all 1 values to "live" in the table
+        // copy all 1 values to "true" in the table
         this.updateView();
     },
     applyRules: function(row, col){
-        let numNeighbors = this.countNeighbors(row, col);
-        if (this.grid[row][col] == 1) {
+        let numNeighbors = this.countAtrueNeighbors(row, col);
+        if (this.grid[row][col].state == 1) {
             if (numNeighbors < 2) {
                 this.nextGrid[row][col] = 0;
             } else if (numNeighbors == 2 || numNeighbors == 3) {
@@ -94,37 +89,37 @@ Object.assign(Grid.prototype, {
             } else if (numNeighbors > 3) {
                 this.nextGrid[row][col] = 0;
             }
-        } else if (this.grid[row][col] == 0) {
+        } else if (this.grid[row][col].state == 0) {
             if (numNeighbors == 3) {
                 this.nextGrid[row][col] = 1;
             }
         }
     },
-    countNeighbors: function(row, col){
+    countAtrueNeighbors: function(row, col){
         let count = 0;
         if (row - 1 >= 0) {
-            if (this.grid[row - 1][col] == 1) count++;
+            if (this.grid[row - 1][col].state == 1) count++;
         }
         if (row - 1 >= 0 && col - 1 >= 0) {
-            if (this.grid[row - 1][col - 1] == 1) count++;
+            if (this.grid[row - 1][col - 1].state == 1) count++;
         }
         if (row - 1 >= 0 && col + 1 < this.columns) {
-            if (this.grid[row - 1][col + 1] == 1) count++;
+            if (this.grid[row - 1][col + 1].state == 1) count++;
         }
         if (col - 1 >= 0) {
-            if (this.grid[row][col - 1] == 1) count++;
+            if (this.grid[row][col - 1].state == 1) count++;
         }
         if (col + 1 < this.columns) {
-            if (this.grid[row][col + 1] == 1) count++;
+            if (this.grid[row][col + 1].state == 1) count++;
         }
         if (row + 1 < this.rows) {
-            if (this.grid[row + 1][col] == 1) count++;
+            if (this.grid[row + 1][col].state == 1) count++;
         }
         if (row + 1 < this.rows && col - 1 >= 0) {
-            if (this.grid[row + 1][col - 1] == 1) count++;
+            if (this.grid[row + 1][col - 1].state == 1) count++;
         }
         if (row + 1 < this.rows && col + 1 < this.columns) {
-            if (this.grid[row + 1][col + 1] == 1) count++;
+            if (this.grid[row + 1][col + 1].state == 1) count++;
         }
         return count;
     }

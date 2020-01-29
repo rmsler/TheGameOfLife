@@ -4,6 +4,7 @@ function Shapes(dataArray, clearButtonHandler) {
     }
     this.shapes = dataArray;
     this.clearButtonHandler = ()=> clearButtonHandler();
+    this.predefinedArray;
 }
 Object.assign(Shapes.prototype, {
     init: function(wrapper, row, col){
