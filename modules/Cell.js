@@ -1,9 +1,7 @@
-function Cell(row, columns) {
+function Cell() {
     if (!(this instanceof Cell)) {
-        return new Cell(grid);
+        return new Cell();
     }
-    this.row = row;
-    this.columns = columns;
     this.state = false;
     this.domElement;
 }

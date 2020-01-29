@@ -53,7 +53,7 @@ Object.assign(Grid.prototype, {
         for (let i = 0; i < this.rows; i++) {
             let tr = document.createElement("tr");
             for (let j = 0; j < this.columns; j++) { 
-                this.grid[i][j] = new Cell(i, j);
+                this.grid[i][j] = new Cell();
                 let cell = this.grid[i][j].createCell();
                 tr.appendChild(cell);
             }
