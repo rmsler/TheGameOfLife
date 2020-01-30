@@ -18,6 +18,7 @@ td {
   border-radius: 3px;
   width: 10px;
   height: 10px;
+  background-color: transparent;
 }
 
 span {
@@ -35,10 +36,6 @@ span {
   background: linear-gradient(
       to bottom right,
       #C5DEC6, #587559);
-}
-
-td.false {
-  background-color: transparent;
 }
 
 td.true {

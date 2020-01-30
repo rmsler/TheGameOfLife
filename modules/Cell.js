@@ -21,8 +21,8 @@ Object.assign(Cell.prototype, {
         let cellClass = (this.domElement.classList[0]);
         let state = this.state;
         if(cellClass.toString() !== state.toString()){
-            this.domElement.removeAttribute("class", this.state!=0 ? "false" : "true");
-            this.domElement.setAttribute("class", this.state!=0 ?"true" : "false");
+            this.domElement.removeAttribute("class", state!=0 ? "false" : "true");
+            this.domElement.setAttribute("class", state!=0 ?"true" : "false");
         }
     }
 })
