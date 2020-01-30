@@ -51,9 +51,8 @@ Object.assign(Grid.prototype, {
         for (let i = 0; i < cellsList.length; i++) {
             cells.push(cellsList[i]);
         }
-
         for (let i = 0; i < cells.length; i++) {
-            cells[i].setAttribute("class", "false");
+            cells[i].removeAttribute("class", "true");
         }
         this.resetGrids();
     },

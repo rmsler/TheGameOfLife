@@ -8,7 +8,6 @@ function Cell() {
 Object.assign(Cell.prototype, {
     createCell: function(){
         let cell = document.createElement("td");
-        cell.setAttribute("class", this.state);
         cell.onclick = () => this.cellClickHandler();
         this.domElement = cell;
         return this.domElement;
@@ -18,11 +17,11 @@ Object.assign(Cell.prototype, {
         this.updateVisual();
     },
     updateVisual: function(){
-        let cellClass = (this.domElement.classList[0]);
-        let state = this.state;
-        if(cellClass.toString() !== state.toString()){
-            this.domElement.removeAttribute("class", state!=0 ? "false" : "true");
-            this.domElement.setAttribute("class", state!=0 ?"true" : "false");
+        if(this.state){
+            this.domElement.setAttribute("class","true");
+        }
+        else{
+            this.domElement.removeAttribute("class","true");
         }
     }
 })
