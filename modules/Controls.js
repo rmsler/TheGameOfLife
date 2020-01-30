@@ -47,18 +47,6 @@ Object.assign(Controls.prototype, {
         let startButton = document.getElementById('start');
         startButton.innerHTML = "Start";
         clearTimeout(this.timer);
-
-        let cellsList = document.getElementsByClassName("true");
-        // convert to array first, otherwise, you're working on a true node list
-        // and the update doesn't work!
-        let cells = [];
-        for (let i = 0; i < cellsList.length; i++) {
-            cells.push(cellsList[i]);
-        }
-
-        for (let i = 0; i < cells.length; i++) {
-            cells[i].setAttribute("class", "false");
-        }
         this.resetGrids();
     }, 
     playGame: function(){

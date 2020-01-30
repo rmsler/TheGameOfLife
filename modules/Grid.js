@@ -40,8 +40,22 @@ Object.assign(Grid.prototype, {
         this.initializeGrids();
         this.createTable(wrapper);
         this.resetGrids();
-        let controlButtons = new Controls(this.computeNextGen.bind(this), this.resetGrids.bind(this));
+        let controlButtons = new Controls(this.computeNextGen.bind(this), this.resetCallback.bind(this));
         controlButtons.setupControlButtons();
+    },
+    resetCallback: function(){
+        let cellsList = document.getElementsByClassName("true");
+        // convert to array first, otherwise, you're working on a true node list
+        // and the update doesn't work!
+        let cells = [];
+        for (let i = 0; i < cellsList.length; i++) {
+            cells.push(cellsList[i]);
+        }
+
+        for (let i = 0; i < cells.length; i++) {
+            cells[i].setAttribute("class", "false");
+        }
+        this.resetGrids();
     },
     createTable: function(wrapper){
         if (!wrapper) {
@@ -82,12 +96,10 @@ Object.assign(Grid.prototype, {
     applyRules: function(row, col){
         let numNeighbors = this.countAtrueNeighbors(row, col);
         if (this.grid[row][col].state == 1) {
-            if (numNeighbors < 2) {
+            if (numNeighbors < 2 || numNeighbors > 3) {
                 this.nextGrid[row][col] = 0;
             } else if (numNeighbors == 2 || numNeighbors == 3) {
                 this.nextGrid[row][col] = 1;
-            } else if (numNeighbors > 3) {
-                this.nextGrid[row][col] = 0;
             }
         } else if (this.grid[row][col].state == 0) {
             if (numNeighbors == 3) {

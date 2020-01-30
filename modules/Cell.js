@@ -14,12 +14,12 @@ Object.assign(Cell.prototype, {
         return this.domElement;
     },
     cellClickHandler: function(){ 
-        this.state = Number(!this.state);
+        this.state = !this.state;
         this.updateVisual();
     },
     updateVisual: function(){
         let cellClass = (this.domElement.classList[0]);
-        let state = !!(this.state);
+        let state = this.state;
         if(cellClass.toString() !== state.toString()){
             this.domElement.removeAttribute("class", this.state!=0 ? "false" : "true");
             this.domElement.setAttribute("class", this.state!=0 ?"true" : "false");
