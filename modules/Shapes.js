@@ -17,16 +17,16 @@ Object.assign(Shapes.prototype, {
     },
     addModel: function(rows,cols){
         this.clearButtonHandler();
-        let row = rowcol[0];
-        let col = rowcol[1];
-        let classes = e.getAttribute("class");
-        if (classes.indexOf("live") > -1) {
-            e.setAttribute("class", "dead");
-            this.grid[row][col] = 0;
-        } else {
-            e.setAttribute("class", "live");
-            this.grid[row][col] = 1;
-        }
+        // let row = rowcol[0];
+        // let col = rowcol[1];
+        // let classes = e.getAttribute("class");
+        // if (classes.indexOf("live") > -1) {
+        //     e.setAttribute("class", "dead");
+        //     this.grid[row][col] = 0;
+        // } else {
+        //     e.setAttribute("class", "live");
+        //     this.grid[row][col] = 1;
+        // }
     }
 })
 
